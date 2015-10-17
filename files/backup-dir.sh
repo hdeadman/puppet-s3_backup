@@ -6,12 +6,13 @@
 # @author Justas Azna <ja@fadeit.dk>
 # @date October, 2015
 #
-# Example usage: ./backup-dir.sh --bucket="s3://my-bucket" --dir="/var/log" --key="log"
+# Example usage: ./backup-dir.sh --bucket="s3://my-bucket" --dir="/var/log" --identifier="log"
 
 BUCKET=""
 TARGET_DIR=""
-KEY=""
+IDENTIFIER=""
 WORK_DIR=/tmp/backup
+HOME=/root
 
 for i in "$@"
 do
@@ -24,8 +25,8 @@ case $i in
     TARGET_DIR="${i#*=}"
     shift
     ;;
-    -k=*|--key=*)
-    KEY="${i#*=}"
+    -i=*|--identifier=*)
+    IDENTIFIER="${i#*=}"
     shift
     ;;
     *)
@@ -46,7 +47,7 @@ if [[ $TARGET_DIR == "" ]]; then
     MISSING=true
 fi
 
-if [[ $KEY == "" ]]; then
+if [[ $IDENTIFIER == "" ]]; then
     echo "missing argument -k, --key"
     MISSING=true
 fi
@@ -61,11 +62,11 @@ if [[ $(whoami) != root ]]; then
 fi
 
 # Generate ID
-ID=$KEY-$(date +%Y-%m-%d_%H_%M)
+ID=$IDENTIFIER-$(date +%Y-%m-%d_%H_%M)
 
 echo "Bucket: $BUCKET"
 echo "Target directory: $TARGET_DIR"
-echo "Key: $KEY"
+echo "Identifier: $IDENTIFIER"
 echo "Id: $ID"
 
 # Ensure that working directory exists
@@ -76,7 +77,7 @@ cd $WORK_DIR || exit 1; cp "$TARGET_DIR" -r "$ID"
 tar -cvJf "$ID.tar.xz" "$ID"
 
 # Upload to AWS
-aws s3 cp "$ID.tar.xz" "$BUCKET"
+/usr/local/bin/aws s3 cp "$ID.tar.xz" "$BUCKET"
 
 # Clean up
 rm -rf "$ID"

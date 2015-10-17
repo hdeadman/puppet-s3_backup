@@ -11,6 +11,7 @@
 BUCKET=""
 DATABASE=""
 WORK_DIR=/tmp/backup/pgsql
+HOME=/root
 
 # Parse arguments
 for i in "$@"
@@ -68,7 +69,7 @@ sudo -H -u postgres bash -c "pg_dump $DATABASE > $WORK_DIR/$ID.psql"
 cd $WORK_DIR || exit 1; tar -cvJf "$ID.psql.tar.xz" "$ID.psql"
 
 # Upload to AWS
-aws s3 cp "$ID.psql.tar.xz" "$BUCKET"
+/usr/local/bin/aws s3 cp "$ID.psql.tar.xz" "$BUCKET"
 
 # Clean up
 rm "$ID.psql.tar.xz"
