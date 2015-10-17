@@ -53,7 +53,7 @@ if [[ $(whoami) != root ]]; then
 fi
 
 # Generate ID
-ID=pgsql-$DATABASE-$(date +%Y-%m-%d_%H_%M)
+ID=$DATABASE-$(date +%Y-%m-%d_%H_%M)
 
 echo "Bucket: $BUCKET"
 echo "Database: $DATABASE"
