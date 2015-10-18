@@ -14,7 +14,7 @@ class { 's3_backup':
 }
 ```
 
-**Setup cron to backup /var/log directory every night 1AM**
+**Setup cron to backup /var/log directory 1AM, every night**
 
 ```puppet
 s3_backup::backup_dir_cron { 'backup_log_dir':
@@ -30,7 +30,7 @@ s3_backup::backup_dir_cron { 'backup_log_dir':
 Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. s3://my-bucket/log-2015-10-18\_01\_00.tar.xz .
 
 
-**Setup cron to backup a specific PostgreSQL database 2AM every night**
+**Setup cron to backup a specific PostgreSQL database 2AM, every night**
 
 Once the schedule is executed, it will result in a copressed and timestamped backup archive E.g. s3://my-bucket/app-2015-10-18\_02\_00.psql.tar.xz .
 

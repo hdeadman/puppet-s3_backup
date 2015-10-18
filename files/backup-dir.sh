@@ -11,7 +11,7 @@
 BUCKET=""
 TARGET_DIR=""
 IDENTIFIER=""
-WORK_DIR=/tmp/backup
+WORK_DIR=/tmp/s3_backup
 HOME=/root
 
 for i in "$@"
