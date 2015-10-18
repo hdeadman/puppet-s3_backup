@@ -12,7 +12,6 @@ define s3_backup::backup_pgsql_cron (
   validate_string($database)
 
 
-  # Cleans all files older than 5 days from TMP
   cron { "${title}_backup_dir_cron":
     ensure      => $ensure,
     command     =>  "/usr/local/bin/s3_backup-backup-pgsql --bucket='${bucket}' --database='${database}'",

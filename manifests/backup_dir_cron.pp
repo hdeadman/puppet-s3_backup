@@ -14,7 +14,6 @@ define s3_backup::backup_dir_cron (
   validate_string($identifier)
 
 
-  # Cleans all files older than 5 days from TMP
   cron { "${title}_backup_dir_cron":
     ensure      => $ensure,
     command     =>  "/usr/local/bin/s3_backup-backup-dir --bucket='${bucket}' --dir='${target_dir}' --identifier='$identifier'",
