@@ -1,10 +1,12 @@
-# s3_backup
+# s3\_backup
 
 Backup various stuff to S3
 
 ## Usage
 
-**Install awscli and setup credentials  and install backup scripts. The access policy only needs to allow PutObject action in backup bucket.**
+**Install and configure**
+
+Install [awscli](https://aws.amazon.com/cli/), setup credentials and install backup scripts. The access policy only needs to allow PutObject action in backup bucket.
 
 ```puppet
 class { 's3_backup':
@@ -27,12 +29,10 @@ s3_backup::backup_dir_cron { 'backup_log_dir':
 }
 ```
 
-Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. s3://my-bucket/log-2015-10-18\_01\_00.tar.xz .
+Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. `s3://my-bucket/log-2015-10-18_01_00.tar.xz` .
 
 
 **Setup cron to backup a specific PostgreSQL database 2AM, every night**
-
-Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. s3://my-bucket/app-2015-10-18\_02\_00.psql.tar.xz .
 
 ```puppet
 s3_backup::backup_pgsql_cron { 'backup_app_database':
@@ -43,3 +43,5 @@ s3_backup::backup_pgsql_cron { 'backup_app_database':
   hour        => '2',
 }
 ```
+
+Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. `s3://my-bucket/app-2015-10-18_02_00.psql.tar.xz` .
