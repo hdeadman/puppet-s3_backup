@@ -32,7 +32,7 @@ Once the schedule is executed, it will result in a compressed and timestamped ba
 
 **Setup cron to backup a specific PostgreSQL database 2AM, every night**
 
-Once the schedule is executed, it will result in a copressed and timestamped backup archive E.g. s3://my-bucket/app-2015-10-18\_02\_00.psql.tar.xz .
+Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. s3://my-bucket/app-2015-10-18\_02\_00.psql.tar.xz .
 
 ```puppet
 s3_backup::backup_pgsql_cron { 'backup_app_database':
