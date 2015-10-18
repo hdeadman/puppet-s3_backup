@@ -12,7 +12,7 @@ define s3_backup::backup_pgsql_cron (
   validate_string($database)
 
 
-  cron { "${title}_backup_dir_cron":
+  cron { "${title}_backup_pgsql_cron":
     ensure      => $ensure,
     command     =>  "/usr/local/bin/s3_backup-backup-pgsql --bucket='${bucket}' --database='${database}'",
     minute      => $minute,
