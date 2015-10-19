@@ -45,3 +45,13 @@ s3_backup::backup_pgsql_cron { 'backup_app_database':
 ```
 
 Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. `s3://my-bucket/app-2015-10-18_02_00.psql.tar.xz` .
+
+
+===================
+<br/>
+<a href="http:fadeit.dk"><img src="http://fadeit.dk/src/assets/img/brand/fadeit_logo_full.svg" alt="The fadeit logo" style="width:200px;"/></a><br/><br/>
+
+####About fadeit
+We love and are really good at designing &amp; developing beautiful software, web and mobile applications.
+
+See more at [fadeit.dk](http://fadeit.dk)
