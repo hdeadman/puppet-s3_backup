@@ -9,9 +9,9 @@
 # Example usage: ./backup-auth0.sh --bucket="s3://my-bucket" --domain="https://fadeit.auth0.com" --token="ey..."
 
 BUCKET=""
-DATABASE=""
 DOMAIN=""
-WORK_DIR=/tmp/s3_backup/auth0
+WORK_DIR_NAME=auth0
+WORK_DIR=/tmp/s3_backup/$WORK_DIR_NAME
 HOME=/root
 
 # Parse arguments
@@ -84,7 +84,7 @@ while true; do
 
     if [[ $status_code != 200 ]]; then
         echo "CURL returned HTTP status code $status_code:"
-        echo $response
+        echo "$response"
         exit 1
     fi
 
@@ -104,13 +104,13 @@ while true; do
 
 done
 
-cd $WORK_DIR/..
-tar -cvJf "$ID.tar.xz" "auth0"
+cd $WORK_DIR/.. || exit 1
+tar -cvJf "$ID.tar.xz" "$WORK_DIR_NAME"
 
 # Upload to AWS
 /usr/local/bin/aws s3 cp "$ID.tar.xz" "$BUCKET"
 
 # Clean up
-rm -rf "auth0"
+rm -rf "$WORK_DIR_NAME"
 rm "$ID.tar.xz"
 exit 0

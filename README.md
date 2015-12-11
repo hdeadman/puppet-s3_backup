@@ -46,6 +46,19 @@ s3_backup::backup_pgsql_cron { 'backup_app_database':
 
 Once the schedule is executed, it will result in a compressed and timestamped backup archive E.g. `s3://my-bucket/app-2015-10-18_02_00.psql.tar.xz` .
 
+**Backup auth0 users 2AM, every night**
+
+```puppet
+s3_backup::backup_auth0_cron { 'backup_auth0_users':
+  ensure      => present,
+  bucket      => 's3://my-bucket',
+  domain      => 'xxxxxx.auth0.eu',
+  token       => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  minute      => '0',
+  hour        => '2',
+}
+```
+
 
 ===================
 <br/>
