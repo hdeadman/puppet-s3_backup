@@ -6,10 +6,11 @@
 # @author Sander Sink <ss@fadeit.dk>
 # @date November, 2015
 #
-# Example usage: ./backup-auth0.sh --bucket="s3://my-bucket" --token="ey..."
+# Example usage: ./backup-auth0.sh --bucket="s3://my-bucket" --domain="https://fadeit.auth0.com" --token="ey..."
 
 BUCKET=""
 DATABASE=""
+DOMAIN=""
 WORK_DIR=/tmp/s3_backup/auth0
 HOME=/root
 
@@ -19,6 +20,10 @@ do
 case $i in
     -b=*|--bucket=*)
     BUCKET="${i#*=}"
+    shift # past argument=value
+    ;;
+    -d=*|--domain=*)
+    DOMAIN="${i#*=}"
     shift # past argument=value
     ;;
     -t=*|--token=*)
@@ -35,6 +40,11 @@ done
 MISSING=false
 if [[ $BUCKET == "" ]]; then
     echo "missing argument -b, --bucket"
+    MISSING=true
+fi
+
+if [[ $DOMAIN == "" ]]; then
+    echo "missing argument -d, --domain"
     MISSING=true
 fi
 
@@ -57,30 +67,50 @@ ID="Auth0-users $(date +%Y-%m-%d_%H_%M)"
 
 echo "Bucket: $BUCKET"
 echo "Token: $TOKEN"
+echo "Domain: $DOMAIN"
 echo "File: $ID"
 
 mkdir -p $WORK_DIR
-chown -R postgres $WORK_DIR
 
+PAGE=0
 
-response=$(curl --silent --write-out "\n%{http_code}\n" https://fadeit.eu.auth0.com/api/v2/users -H "Authorization: Bearer $TOKEN")
-#Parse status code and response body into variables
-status_code=$(echo "$response" | sed -n '$p')
-json=$(echo "$response" | sed '$d')
+#Loop pages until we get empty response
+while true; do
+    echo "Fetching page $PAGE"
+    response=$(curl --silent --write-out "\n%{http_code}\n" "$DOMAIN/api/v2/users?page=$PAGE&per_page=100" -H "Authorization: Bearer $TOKEN")
+    #Parse status code and response body into variables
+    status_code=$(echo "$response" | sed -n '$p')
+    json=$(echo "$response" | sed '$d')
 
-if [[ $status_code != 200 ]]; then
-    echo "CURL returned HTTP status code $status_code"
-    exit 1
-fi
+    if [[ $status_code != 200 ]]; then
+        echo "CURL returned HTTP status code $status_code:"
+        echo $response
+        exit 1
+    fi
 
-echo "$json" > "$WORK_DIR/$ID.json"
-cd $WORK_DIR || exit 1; tar -cvJf "$ID.json.tar.xz" "$ID.json"
+    size=${#response} 
+    if [ $size -le 10 ]; then
+        #If size is less than 10, then response is empty
+        break
+    fi
+    
+    echo "$json" > "$WORK_DIR/$ID-page-$PAGE.json"
+    PAGE=$((PAGE + 1))
+    if [ $PAGE -ge 50 ]; then
+        #In case auth0 changes empty response length, we limit to 50 pages
+        echo "Reached limit of 50 pages"
+        break
+    fi
 
-#TODO!
+done
+
+cd $WORK_DIR/..
+tar -cvJf "$ID.tar.xz" "auth0"
+
 # Upload to AWS
-#/usr/local/bin/aws s3 cp "$ID.json.tar.xz" "$BUCKET"
+/usr/local/bin/aws s3 cp "$ID.tar.xz" "$BUCKET"
 
 # Clean up
-#rm "$ID.json.tar.xz"
-#rm "$ID.json"
+rm -rf "auth0"
+rm "$ID.tar.xz"
 exit 0
