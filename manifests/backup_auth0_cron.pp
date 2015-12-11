@@ -15,12 +15,12 @@ define s3_backup::backup_auth0_cron (
 
 
   cron { "${title}_backup_auth0_cron":
-    ensure      => $ensure,
-    command     =>  "/usr/local/bin/s3_backup-backup-auth0 --bucket='${bucket}' --domain='${domain}' --token='${token}'",
-    minute      => $minute,
-    hour        => $hour,
-    weekday     => $weekday,
-    monthday    => $monthday,
-    month       => $month,
+    ensure   => $ensure,
+    command  => "/usr/local/bin/s3_backup-backup-auth0 --bucket='${bucket}' --domain='${domain}' --token='${token}'",
+    minute   => $minute,
+    hour     => $hour,
+    weekday  => $weekday,
+    monthday => $monthday,
+    month    => $month,
   }
 }

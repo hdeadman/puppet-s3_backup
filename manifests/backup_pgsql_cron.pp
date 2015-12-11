@@ -13,12 +13,12 @@ define s3_backup::backup_pgsql_cron (
 
 
   cron { "${title}_backup_pgsql_cron":
-    ensure      => $ensure,
-    command     =>  "/usr/local/bin/s3_backup-backup-pgsql --bucket='${bucket}' --database='${database}'",
-    minute      => $minute,
-    hour        => $hour,
-    weekday     => $weekday,
-    monthday    => $monthday,
-    month       => $month,
+    ensure   => $ensure,
+    command  =>  "/usr/local/bin/s3_backup-backup-pgsql --bucket='${bucket}' --database='${database}'",
+    minute   => $minute,
+    hour     => $hour,
+    weekday  => $weekday,
+    monthday => $monthday,
+    month    => $month,
   }
 }
