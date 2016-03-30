@@ -15,12 +15,12 @@ define s3_backup::backup_dir_cron (
 
 
   cron { "${title}_backup_dir_cron":
-    ensure      => $ensure,
-    command     =>  "/usr/local/bin/s3_backup-backup-dir --bucket='${bucket}' --dir='${target_dir}' --identifier='$identifier'",
-    minute      => $minute,
-    hour        => $hour,
-    weekday     => $weekday,
-    monthday    => $monthday,
-    month       => $month,
+    ensure   => $ensure,
+    command  => "/usr/local/bin/s3_backup-backup-dir --bucket='${bucket}' --dir='${target_dir}' --identifier='${identifier}'",
+    minute   => $minute,
+    hour     => $hour,
+    weekday  => $weekday,
+    monthday => $monthday,
+    month    => $month,
   }
 }

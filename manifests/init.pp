@@ -15,7 +15,7 @@ class s3_backup (
     pip_path              => $pip_path,
   }
 
-  class { 's3_backup::configure': 
+  class { 's3_backup::configure':
     aws_access_key_id     => $aws_access_key_id,
     aws_secret_access_key => $aws_secret_access_key,
     region                => $region,
