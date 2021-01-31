@@ -10,7 +10,7 @@
 
 BUCKET=""
 DATABASE=""
-WORK_DIR=/tmp/s3_backup/pgsql
+WORK_DIR=<%= @workdir_base %>/s3_backup/pgsql
 HOME=/root
 
 # Parse arguments

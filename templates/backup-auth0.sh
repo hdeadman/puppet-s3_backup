@@ -11,7 +11,7 @@
 BUCKET=""
 DOMAIN=""
 WORK_DIR_NAME=auth0
-WORK_DIR=/tmp/s3_backup/$WORK_DIR_NAME
+WORK_DIR=<%= @workdir_base %>/s3_backup/$WORK_DIR_NAME
 HOME=/root
 
 # Parse arguments
